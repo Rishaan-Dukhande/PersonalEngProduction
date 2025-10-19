@@ -1,0 +1,66 @@
+#include <Servo.h>
+
+Servo scareServo;
+
+// Ultrasonic pins
+const int trigPin = 9;
+const int echoPin = 10;
+
+// Servo pin
+const int servoPin = 3;
+
+// Detection settings
+const int triggerDistance = 50; // cm, change to adjust sensitivity
+
+void setup() {
+  Serial.begin(9600);
+  scareServo.attach(servoPin);
+  scareServo.write(90); // start position
+  
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+}
+
+void loop() {
+  long duration, distance;
+  
+  // Send ultrasonic pulse
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  
+  // Read echo time
+  duration = pulseIn(echoPin, HIGH);
+  
+  // Convert to cm
+  distance = duration * 0.034 / 2;
+
+  Serial.print("Distance: ");
+  Serial.println(distance);
+
+  // If something is close enough
+  if (distance > 0 && distance <= triggerDistance) {
+    jumpScare();
+    delay(2000); // wait before checking again
+  }
+}
+
+void scareMove() {
+  scareServo.write(75); 
+  scareServo.write(30); // Move servo quickly
+  delay(400);
+   scareServo.write(75); 
+  scareServo.write(150); // Return
+  
+  delay(400);
+   scareServo.write(115);
+  scareServo.write(90);
+}
+
+void jumpScare() {
+  scareMove();
+  scareMove();
+  scareMove();
+}
