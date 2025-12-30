@@ -125,6 +125,10 @@ void setup() { //this is our setup function - it runs once on start up, and is b
     pitchServo.attach(11); //attach PITCH servo to pin 11
     rollServo.attach(12); //attach ROLL servo to pin 12
 
+    //initilizes pinModes of ultrasonic sensor's trig and echo pins
+    pinMode(trigPin, OUTPUT);
+    pinMode(echoPin, INPUT);
+    digitalWrite(trigPin, LOW);
 
 
 
@@ -149,6 +153,9 @@ void setup() { //this is our setup function - it runs once on start up, and is b
 
 void loop() {
 
+    //checks for ultraSonic launch
+    ultraSonic();
+    
     /*
     * Check if received data is available and if yes, try to decode it.
     */
@@ -176,8 +183,7 @@ void loop() {
         /*
         * Finally, check the received data and perform actions according to the received command
         */
-        //checks for ultraSonic launch
-        ultraSonic();
+        
         //checks each case based on IR remote button input
         switch(IrReceiver.decodedIRData.command){ //this is where the commands are handled
 
@@ -360,6 +366,8 @@ void ultraSonic(){
 
   if(distance > 0 && distance < triggerDistance){
     fire();
+    //delays 3 seconds to prevent rapid fire
+    delay(3000);
   }
 
 }
