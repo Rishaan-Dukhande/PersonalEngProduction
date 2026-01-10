@@ -1,0 +1,20 @@
+//Code for general servos in C++
+
+//Includes servo library
+#include <Servo.h>
+
+//name servo (change "my" to a name)
+Servo myServo;
+
+//Servo pin initialized to 5
+//You can pick a different servo pin 
+const int servoPin = 5
+
+void setup{
+  myServo.attach(servoPin);
+
+}
+
+void loop{
+
+}
